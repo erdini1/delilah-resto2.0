@@ -5,7 +5,7 @@ const users = [
         lastname: "Erdini",
         email: "correo@correo.com",
         phone: "12345678",
-        addres: "Santa Rosa 631",
+        address: "Santa Rosa 631",
         password: "123456",
         admin: true
     }
