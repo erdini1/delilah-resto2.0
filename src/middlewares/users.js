@@ -1,4 +1,5 @@
 import { HTTP_STATUSES } from "../constants/http.js"
+import { comparePassword } from "../helpers/hashPassword.js"
 import users from "../models/users.js"
 
 
@@ -24,5 +25,26 @@ export const validateUserUniqueData = (req, res, next) => {
     if (users.some(element => element.email === email)) {
         return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The email is already in use" })
     }
+    next()
+}
+
+export const validateUserLoginData = (req, res, next) => {
+    const { username, password } = req.body
+    if (!username || !password) {
+        return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The fields cannot be empty" })
+    }
+    next()
+}
+
+export const validateUserCredentials = async (req, res, next) => {
+    const { username, password } = req.body
+    const user = users.find(element => element.username === username)
+    if (!user) {
+        return res.status(HTTP_STATUSES.UNAUTHORIZED).json({ error: "Invalid Credentials" })
+    }
+    if (!await comparePassword(password, user.password)) {
+        return res.status(HTTP_STATUSES.UNAUTHORIZED).json({ error: "Invalid Credentials" })
+    }
+    req.user = user
     next()
 }

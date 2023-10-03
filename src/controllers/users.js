@@ -16,3 +16,12 @@ export const createUser = async (req, res) => {
     })
     return res.status(HTTP_STATUSES.CREATED).json({ msg: "User created succesfully" })
 }
+
+export const login = (req, res) => {
+    const user = req.user
+    const indexUser = users.findIndex(element => element.username === user.username)
+    return res.status(HTTP_STATUSES.OK).json({
+        msg: "Loggued in successfully",
+        id: indexUser
+    })
+}
