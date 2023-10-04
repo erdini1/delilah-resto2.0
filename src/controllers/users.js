@@ -1,4 +1,6 @@
+import JWT from "jsonwebtoken"
 import { HTTP_STATUSES } from "../constants/http.js"
+import { server } from "../config/env.config.js"
 import users from "../models/users.js"
 import { hashPassword } from "../helpers/hashPassword.js"
 
@@ -18,10 +20,12 @@ export const createUser = async (req, res) => {
 }
 
 export const login = (req, res) => {
-    const user = req.user
-    const indexUser = users.findIndex(element => element.username === user.username)
+    const { username, admin } = req.user
+    const token = JWT.sign({ username, admin }, server.SIGNATURE, {
+        expiresIn: "30m"
+    })
     return res.status(HTTP_STATUSES.OK).json({
         msg: "Loggued in successfully",
-        id: indexUser
+        token
     })
 }

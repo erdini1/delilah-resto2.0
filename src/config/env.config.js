@@ -1,3 +1,6 @@
 import "dotenv/config"
 
-export const PORT = process.env.PORT
+export const server = {
+    PORT: process.env.PORT,
+    SIGNATURE: process.env.SECRETKEY
+}
