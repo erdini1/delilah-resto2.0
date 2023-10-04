@@ -48,3 +48,10 @@ export const validateUserCredentials = async (req, res, next) => {
     req.user = user
     next()
 }
+
+export const isAuthenticated = (req, res, next) => {
+    const token = +req.headers.authorization?.split("Bearer ")[1]
+    // const user = users.find()
+
+    next()
+}
