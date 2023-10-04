@@ -1,5 +1,6 @@
 import { HTTP_STATUSES } from "../constants/http.js"
 import { comparePassword } from "../helpers/hashPassword.js"
+import { decodedToken } from "../helpers/decodedToken.js"
 import users from "../models/users.js"
 
 
@@ -50,8 +51,21 @@ export const validateUserCredentials = async (req, res, next) => {
 }
 
 export const isAuthenticated = (req, res, next) => {
-    const token = +req.headers.authorization?.split("Bearer ")[1]
-    // const user = users.find()
+    const stringToken = req.headers.authorization
+    try {
+        const { username } = decodedToken(stringToken)
+        const user = users.find(element => element.username === username)
+        req.user = user
+        next()
+    } catch (error) {
+        return res.status(HTTP_STATUSES.UNAUTHORIZED).json({ error: "Not authenticated" })
+    }
+}
 
+export const isAdmin = (req, res, next) => {
+    const user = req.user
+    if (user.admin !== true) {
+        return res.status(HTTP_STATUSES.UNAUTHORIZED).json({ error: "Only an administrator can perform this action" })
+    }
     next()
 }

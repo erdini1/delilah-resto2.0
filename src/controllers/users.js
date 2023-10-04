@@ -20,8 +20,8 @@ export const createUser = async (req, res) => {
 }
 
 export const login = (req, res) => {
-    const { username, admin } = req.user
-    const token = JWT.sign({ username, admin }, server.SIGNATURE, {
+    const { username } = req.user
+    const token = JWT.sign({ username }, server.SIGNATURE, {
         expiresIn: "30m"
     })
     return res.status(HTTP_STATUSES.OK).json({
