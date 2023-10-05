@@ -14,3 +14,11 @@ export const validateUniquePaymentMethod = (req, res, next) => {
     if (findMethod) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The payment method is already added" })
     next()
 }
+
+export const validatePaymentMethodExistance = (req, res, next) => {
+    const idMethod = +req.params.idMethod
+    const method = paymentMethods.find(element => element.id === idMethod)
+    if (!method) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The specified ID doesn't belong to a payment method" })
+    req.paymentMethod = method
+    next()
+}

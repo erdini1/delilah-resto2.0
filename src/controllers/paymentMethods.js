@@ -14,3 +14,14 @@ export const newPaymentMethod = (req, res) => {
     })
     return res.status(HTTP_STATUSES.CREATED).json({ msg: "Payment method added succesfully" })
 }
+
+export const updatePaymentMethod = (req, res) => {
+    const { method } = req.body
+    const paymentMethod = req.paymentMethod
+    paymentMethods.forEach(element => (
+        element.id === paymentMethod.id ? (
+            element.method = method
+        ) : ""
+    ))
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Payment method updated succesfully" })
+}
