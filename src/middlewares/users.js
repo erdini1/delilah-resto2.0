@@ -65,7 +65,7 @@ export const isAuthenticated = (req, res, next) => {
 export const isAdmin = (req, res, next) => {
     const user = req.user
     if (user.admin !== true) {
-        return res.status(HTTP_STATUSES.UNAUTHORIZED).json({ error: "Only an administrator can perform this action" })
+        return res.status(HTTP_STATUSES.UNAUTHORIZED).json({ error: "You do not have administrator permissions." })
     }
     next()
 }
