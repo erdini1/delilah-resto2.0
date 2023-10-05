@@ -24,3 +24,10 @@ export const updateProduct = (req, res) => {
     ) : "")
     return res.status(HTTP_STATUSES.OK).json({ msg: "Product modified succesfully" })
 }
+
+export const deleteProduct = (req, res) => {
+    const product = req.product
+    const indexProduct = products.findIndex(element => element.id === product.id)
+    products.splice(indexProduct, 1)
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Product deleted succesfully" })
+}
