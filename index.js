@@ -1,6 +1,5 @@
 import expressConfig from "./src/config/Express.config.js"
 import { server } from "./src/config/env.config.js"
-// import { PORT } from "./src/config/env.config.js"
 
 import users from "./src/routes/users.js"
 import products from "./src/routes/products.js"

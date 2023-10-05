@@ -8,9 +8,19 @@ export const allProducts = (req, res) => {
 export const newProduct = (req, res) => {
     const { name, price } = req.body
     products.push({
-        id: products.length ? products[products.length - 1].id + 1 : 0,     //VER OTRA FORMA. si elimino el ultimo elemento y agrego uno nuevo, en la orden dos productos van a tener el mismo id
+        id: products.length ? products[products.length - 1].id + 1 : 0,     //TODO: VER OTRA FORMA. si elimino el ultimo elemento y agrego uno nuevo, en la orden dos productos van a tener el mismo id
         name,
         price
     })
     return res.status(HTTP_STATUSES.CREATED).json({ msg: "Product added succesfully" })
+}
+
+export const updateProduct = (req, res) => {
+    const product = req.product
+    const { name, price } = req.body
+    products.forEach(element => element.id === product.id ? (
+        element.name = name || element.name,
+        element.price = price || element.price
+    ) : "")
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Product modified succesfully" })
 }

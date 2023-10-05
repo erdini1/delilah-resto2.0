@@ -21,9 +21,9 @@ export const createUser = async (req, res) => {
 
 export const login = (req, res) => {
     const { username } = req.user
-    const token = JWT.sign({ username }, server.SIGNATURE, {
+    const token = JWT.sign({ username }, server.SIGNATURE /*, {
         expiresIn: "30m"
-    })
+    }*/)    //TODO: Sacarle el comentario en producción
     return res.status(HTTP_STATUSES.OK).json({
         msg: "Loggued in successfully",
         token
