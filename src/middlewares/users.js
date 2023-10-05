@@ -55,6 +55,7 @@ export const isAuthenticated = (req, res, next) => {
     try {
         const { username } = decodedToken(stringToken)
         const user = users.find(element => element.username === username)
+        if (!user) return res.status(HTTP_STATUSES.UNAUTHORIZED).json({ error: "Not authenticated" })
         req.user = user
         next()
     } catch (error) {
@@ -63,8 +64,8 @@ export const isAuthenticated = (req, res, next) => {
 }
 
 export const isAdmin = (req, res, next) => {
-    const user = req.user
-    if (user.admin !== true) {
+    const { admin } = req.user
+    if (admin !== true) {
         return res.status(HTTP_STATUSES.UNAUTHORIZED).json({ error: "You do not have administrator permissions." })
     }
     next()
