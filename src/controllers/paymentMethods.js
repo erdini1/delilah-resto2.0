@@ -25,3 +25,10 @@ export const updatePaymentMethod = (req, res) => {
     ))
     return res.status(HTTP_STATUSES.OK).json({ msg: "Payment method updated succesfully" })
 }
+
+export const deletePaymentMethod = (req, res) => {
+    const paymentMethod = req.paymentMethod
+    const indexPaymentMethod = paymentMethods.findIndex(element => element.id === paymentMethod.id)
+    paymentMethods.splice(indexPaymentMethod, 1)
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Payment method deleted succesfully" })
+}
