@@ -12,7 +12,7 @@ export const newProduct = (req, res) => {
         name,
         price
     })
-    return res.status(HTTP_STATUSES.CREATED).json({ msg: "Product added succesfully" })
+    return res.status(HTTP_STATUSES.CREATED).json({ msg: "Product added successfully" })
 }
 
 export const updateProduct = (req, res) => {
@@ -22,12 +22,12 @@ export const updateProduct = (req, res) => {
         element.name = name || element.name,
         element.price = price || element.price
     ) : "")
-    return res.status(HTTP_STATUSES.OK).json({ msg: "Product modified succesfully" })
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Product modified successfully" })
 }
 
 export const deleteProduct = (req, res) => {
     const product = req.product
     const indexProduct = products.findIndex(element => element.id === product.id)
     products.splice(indexProduct, 1)
-    return res.status(HTTP_STATUSES.OK).json({ msg: "Product deleted succesfully" })
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Product deleted successfully" })
 }

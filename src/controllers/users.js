@@ -16,7 +16,7 @@ export const createUser = async (req, res) => {
         password: await hashPassword(password),
         admin: false
     })
-    return res.status(HTTP_STATUSES.CREATED).json({ msg: "User created succesfully" })
+    return res.status(HTTP_STATUSES.CREATED).json({ msg: "User created successfully" })
 }
 
 export const login = (req, res) => {

@@ -1,10 +1,10 @@
 const orders = [
     {
-        orderId: 0,
-        orderStatus: "confirmed",
-        orderTime: "06-10-23",
-        orderDescription: "2xFocac 3xHambu",
-        orderTotal: 1600,
+        id: 0,
+        orderStatus: "pending",
+        orderDate: "06-10-23",
+        description: "2xFocac 3xHambu",
+        total: 1600,
         username: "Kvothe",
         address: "Santa Rosa 631",
         paymentMethod: "Efectivo",
@@ -22,11 +22,11 @@ const orders = [
         ]
     },
     {
-        orderId: 0,
-        orderStatus: "confirmed",
-        orderTime: "07-10-23",
-        orderDescription: "1xFocac 1xSandw",
-        orderTotal: 1500,
+        id: 1,
+        orderStatus: "sending",
+        orderDate: "07-10-23",
+        description: "1xFocac 1xSandw",
+        total: 1500,
         username: "kvothe",
         address: "Viedma 123",
         paymentMethod: "Efectivo",

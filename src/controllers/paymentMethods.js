@@ -12,7 +12,7 @@ export const newPaymentMethod = (req, res) => {
         id: paymentMethods.length != 0 ? paymentMethods[paymentMethods.length - 1].id + 1 : 0,
         method
     })
-    return res.status(HTTP_STATUSES.CREATED).json({ msg: "Payment method added succesfully" })
+    return res.status(HTTP_STATUSES.CREATED).json({ msg: "Payment method added successfully" })
 }
 
 export const updatePaymentMethod = (req, res) => {
@@ -23,12 +23,12 @@ export const updatePaymentMethod = (req, res) => {
             element.method = method
         ) : ""
     ))
-    return res.status(HTTP_STATUSES.OK).json({ msg: "Payment method updated succesfully" })
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Payment method updated successfully" })
 }
 
 export const deletePaymentMethod = (req, res) => {
     const paymentMethod = req.paymentMethod
     const indexPaymentMethod = paymentMethods.findIndex(element => element.id === paymentMethod.id)
     paymentMethods.splice(indexPaymentMethod, 1)
-    return res.status(HTTP_STATUSES.OK).json({ msg: "Payment method deleted succesfully" })
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Payment method deleted successfully" })
 }
