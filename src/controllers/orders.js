@@ -9,10 +9,13 @@ export const allOrders = (req, res) => {
     return res.status(HTTP_STATUSES.OK).json(ordersUser)
 }
 
-// TODO: agregar validateOrderData
-// TODO: agregar validateModifyStateData
+export const newOrder = (req, res) => {
+    return res.status(HTTP_STATUSES.OK).json({ msg: "From new Order controller" })
+}
 
-export const modifyStateOrder = (req, res) => {
+
+
+export const modifyOrderState = (req, res) => {
     const order = req.order
     const { orderStatus } = req.body
     orders.forEach(element => (
