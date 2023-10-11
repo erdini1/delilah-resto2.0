@@ -1,5 +1,6 @@
 import { HTTP_STATUSES } from "../constants/http.js"
 import orders from "../models/orders.js"
+import paymentMethods from "../models/paymentMethods.js"
 
 export const validateOrderData = (req, res, next) => {
     const { address, paymentMethod } = req.body
@@ -34,5 +35,12 @@ export const validateOrderNotPending = (req, res, next) => {
 export const validateModifyOrderStateData = (req, res, next) => {
     const { orderStatus } = req.body
     if (orderStatus === "") return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The fields cannot be empty" })
+    next()
+}
+
+export const validatePaymentMethod = (req, res, next) => {
+    const { paymentMethod } = req.body
+    const findPaymentMethod = paymentMethods.find(element => element.method === paymentMethod)
+    if (!findPaymentMethod) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "You must specify a valid payment method" })
     next()
 }
