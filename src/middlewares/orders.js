@@ -1,6 +1,7 @@
 import { HTTP_STATUSES } from "../constants/http.js"
 import orders from "../models/orders.js"
 import paymentMethods from "../models/paymentMethods.js"
+import products from "../models/products.js"
 
 export const validateOrderData = (req, res, next) => {
     const { address, paymentMethod } = req.body
@@ -17,6 +18,23 @@ export const validateOrderDatailsData = (req, res, next) => {
     next()
 }
 
+export const validatePaymentMethod = (req, res, next) => {
+    const { paymentMethod } = req.body
+    const findPaymentMethod = paymentMethods.find(element => element.method === paymentMethod)
+    if (!findPaymentMethod) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "You must specify a valid payment method" })
+    next()
+}
+
+export const validateProductInDetails = (req, res, next) => {
+    const { details } = req.body
+    const hasInvalidData = details.some(element => {
+        const { productId } = element
+        const product = products.find(element => element.id === productId)
+        return !product
+    })
+    if (hasInvalidData) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The specified ID doesn't belong to a product" })
+    next()
+}
 
 export const validateOrderExistance = (req, res, next) => {
     const idOrder = +req.params.idOrder
@@ -35,12 +53,5 @@ export const validateOrderNotPending = (req, res, next) => {
 export const validateModifyOrderStateData = (req, res, next) => {
     const { orderStatus } = req.body
     if (orderStatus === "") return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The fields cannot be empty" })
-    next()
-}
-
-export const validatePaymentMethod = (req, res, next) => {
-    const { paymentMethod } = req.body
-    const findPaymentMethod = paymentMethods.find(element => element.method === paymentMethod)
-    if (!findPaymentMethod) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "You must specify a valid payment method" })
     next()
 }
