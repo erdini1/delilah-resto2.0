@@ -10,11 +10,10 @@ export const allOrders = (req, res) => {
     return res.status(HTTP_STATUSES.OK).json(ordersUser)
 }
 
-// TODO: hacer un middleware que revise que los productos existan
 export const newOrder = (req, res) => {
     const { address, paymentMethod, details } = req.body
     const user = req.user
-
+    details.forEach(element => element.subtotal = subtotalOrder(element.productId, element.quantity))
     orders.push({
         id: orders[orders.length - 1].id + 1,
         orderStatus: "pending",
@@ -24,11 +23,9 @@ export const newOrder = (req, res) => {
         username: user.username,
         address: address || user.address,
         paymentMethod: paymentMethod,
-        details /* VER */
+        details
     })
-
-
-    return res.status(HTTP_STATUSES.OK).json({ msg: "From new Order controller" })
+    return res.status(HTTP_STATUSES.CREATED).json({ msg: "Order created successfully" })
 }
 
 

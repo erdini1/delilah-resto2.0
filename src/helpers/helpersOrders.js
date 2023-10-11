@@ -32,7 +32,7 @@ export const totalOrder = (details) => {
 
 export const subtotalOrder = (productId, quantity) => {
     let subtotal = 0
-    const product = element => element.id === productId
-    subtotal = product.price * quantity
+    const product = products.find(element => element.id === productId)
+    subtotal = +product.price * +quantity
     return subtotal
 }
