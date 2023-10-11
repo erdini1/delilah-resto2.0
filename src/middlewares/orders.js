@@ -5,7 +5,8 @@ import products from "../models/products.js"
 
 export const validateOrderData = (req, res, next) => {
     const { address, paymentMethod } = req.body
-    if (address === "" || !paymentMethod) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The fields cannot be empty" })
+    if (req.method === "POST" && (address === "" || !paymentMethod)) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The fields cannot be empty" })
+    if ([address, paymentMethod].some(element => element === "")) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The fields cannot be empty" })
     next()
 }
 
@@ -21,7 +22,7 @@ export const validateOrderDatailsData = (req, res, next) => {
 export const validatePaymentMethod = (req, res, next) => {
     const { paymentMethod } = req.body
     const findPaymentMethod = paymentMethods.find(element => element.method === paymentMethod)
-    if (!findPaymentMethod) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "You must specify a valid payment method" })
+    if (!findPaymentMethod && paymentMethod) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "You must specify a valid payment method" })
     next()
 }
 
@@ -41,6 +42,13 @@ export const validateOrderExistance = (req, res, next) => {
     const order = orders.find(element => element.id === idOrder)
     if (!order) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The specified ID doesn't belong to a order" })
     req.order = order
+    next()
+}
+
+export const validateOrderOwnership = (req, res, next) => {
+    const user = req.user
+    const order = req.order
+    if (user.username !== order.username) return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "You are not the owner of the order" })
     next()
 }
 

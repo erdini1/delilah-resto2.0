@@ -28,8 +28,6 @@ export const newOrder = (req, res) => {
     return res.status(HTTP_STATUSES.CREATED).json({ msg: "Order created successfully" })
 }
 
-
-
 export const modifyOrderState = (req, res) => {
     const order = req.order
     const { orderStatus } = req.body
@@ -39,4 +37,18 @@ export const modifyOrderState = (req, res) => {
         ) : ""
     ))
     return res.status(HTTP_STATUSES.OK).json({ msg: "Order status updated successfully" })
+}
+
+export const updateOrder = (req, res) => {
+    const order = req.order
+    const { address, paymentMethod, details } = req.body
+    details.forEach(element => element.subtotal = subtotalOrder(element.productId, element.quantity))
+    orders.forEach(element => element.id === order.id ? (
+        element.description = descriptionOrder(details),
+        element.total = totalOrder(details),
+        element.address = address || element.address,
+        element.paymentMethod = paymentMethod || element.paymentMethod,
+        element.details = details || element.details
+    ) : "")
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Order modified successfully" })
 }
