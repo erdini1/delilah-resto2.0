@@ -63,3 +63,9 @@ export const validateModifyOrderStateData = (req, res, next) => {
     if (orderStatus === "") return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "The fields cannot be empty" })
     next()
 }
+
+export const validateOrderState = (req, res, next) => {
+    const order = req.order
+    if (order.orderStatus !== "pending") return res.status(HTTP_STATUSES.BAD_REQUEST).json({ error: "You cannot modify an order that has already been confirmed." })
+    next()
+}

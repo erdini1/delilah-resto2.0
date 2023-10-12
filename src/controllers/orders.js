@@ -52,3 +52,11 @@ export const updateOrder = (req, res) => {
     ) : "")
     return res.status(HTTP_STATUSES.OK).json({ msg: "Order modified successfully" })
 }
+
+export const confirmOrder = (req, res) => {
+    const order = req.order
+    orders.forEach(element => element.id === order.id ? (
+        element.orderStatus = "confirmed"
+    ) : "")
+    return res.status(HTTP_STATUSES.OK).json({ msg: "Order confirmed successfully" })
+}
