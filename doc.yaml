@@ -1,0 +1,62 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: Delilah Resto
+  description: Api for order management
+  contact:
+    email: erdini.dylan@gmail.com
+
+servers:
+  - description: Local server
+    url: http://localhost:4000
+
+tags:
+  - name: users
+    description: ""
+  - name: products
+    description: ""
+  - name: orders
+    description: ""
+  - name: paymentMethods
+    description: ""
+
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: username
+                name:
+                  type: string
+                lastname:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+                password:
+                  type: string
+                passwordConf:
+                  type: string
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string

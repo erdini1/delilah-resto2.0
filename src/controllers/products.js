@@ -8,7 +8,7 @@ export const allProducts = (req, res) => {
 export const newProduct = (req, res) => {
     const { name, price } = req.body
     products.push({
-        id: products.length ? products[products.length - 1].id + 1 : 0,     //TODO: VER OTRA FORMA. si elimino el ultimo elemento y agrego uno nuevo, en la orden dos productos van a tener el mismo id
+        id: products.length ? products[products.length - 1].id + 1 : 0,
         name,
         price
     })
