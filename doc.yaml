@@ -26,30 +26,13 @@ paths:
       tags:
         - users
       summary: Register a new user
+      description: Enables a new user to sign up to the system by providing required details like username, email, and password. Once registered, they can log in using their credentials.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                  description: username
-                name:
-                  type: string
-                lastname:
-                  type: string
-                email:
-                  type: string
-                phone:
-                  type: string
-                address:
-                  type: string
-                password:
-                  type: string
-                passwordConf:
-                  type: string
+              $ref: "#/components/schemas/UserRegistration"
       responses:
         "201":
           description: Created
@@ -58,5 +41,131 @@ paths:
               schema:
                 type: object
                 properties:
-                  username:
+                  msg:
                     type: string
+                    example: "User created successfully"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: User Login
+      description: Allows a registered user to log in to the system. They must provide their username and password. Upon successful authentication, they gain access based on their role and permissions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogin"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "Loggued in successfully"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imt2b3RoZSIsImlhdCI6MTY5NjUxNTk2M30.BftpR4MMHY4mVTdmgz7c2EqrAQZ0nt_amzpt3lnglLA"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The fields cannot be empty
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid Credentials"
+
+  /products:
+    get:
+      security:
+        - token: []
+      tags:
+        - products
+      summary: Get products list
+      description: Retrieves a comprehensive list of all products available in the system, detailing product names, prices, and other relevant information.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 0
+                    name:
+                      type: string
+                      example: Focaccia
+                    price:
+                      type: integer
+                      format: int64
+                      example: 500
+
+components:
+  schemas:
+    UserRegistration:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        password:
+          type: string
+        passwordConf:
+          type: string
+    UserLogin:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+  responses:
+    BadRequest:
+      description: "Bad Request - This could be due to missing fields, invalid data, etc"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "The fields cannot be empty"
+
+  securitySchemes:
+    token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
