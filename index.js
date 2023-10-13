@@ -12,8 +12,6 @@ import orders from "./src/routes/orders.js"
 
 const app = expressConfig()
 
-// TODO: Add CORS
-
 // Route middlewares
 app.use("/users", users)
 app.use("/products", products)
