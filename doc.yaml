@@ -15,9 +15,9 @@ tags:
     description: ""
   - name: products
     description: ""
-  - name: orders
-    description: ""
   - name: paymentMethods
+    description: ""
+  - name: orders
     description: ""
 
 paths:
@@ -122,6 +122,384 @@ paths:
                       type: integer
                       format: int64
                       example: 500
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      security:
+        - token: []
+      tags:
+        - products
+      summary: Register a new product (Admin)
+      description: Allows administrators to add a new product to the catalog. Ensure you are logged in and have admin privileges before making a request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductBody"
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Product added successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+  /products/{idProduct}:
+    put:
+      security:
+        - token: []
+      tags:
+        - products
+      summary: Modify Product (Admin)
+      description: Allows an authenticated administrator to update the details of a specific product by providing its ID. Only users with administrator permissions can make modifications to a product.
+      parameters:
+        - name: idProduct
+          in: path
+          required: true
+          description: The ID of the product to modify
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Product modified successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+    delete:
+      security:
+        - token: []
+      tags:
+        - products
+      summary: Delete Product (Admin)
+      description: Allows an authenticated administrator to delete a specific product by providing its ID. Only users with administrator permissions can remove a product from the system.
+      parameters:
+        - name: idProduct
+          in: path
+          required: true
+          description: The ID of the product to modify
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Product deleted successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+
+  /paymentMethods:
+    get:
+      security:
+        - token: []
+      tags:
+        - paymentMethods
+      summary: List Payment Methods (Admin)
+      description: Allows an authenticated administrator to retrieve all available payment methods. Only users with administrator permissions can access this list.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 0
+                    method:
+                      type: string
+                      example: Efectivo
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+    post:
+      security:
+        - token: []
+      tags:
+        - paymentMethods
+      summary: Add New Payment Method (Admin)
+      description: Allows an authenticated administrator to add a new payment method to the system. Only users with administrator permissions can introduce a new payment method.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentMethodBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Payment method added successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+  /paymentMethods/{idMethod}:
+    put:
+      security:
+        - token: []
+      tags:
+        - paymentMethods
+      summary: Update Payment Method (Admin)
+      description: Allows an authenticated administrator to modify an existing payment method by providing its ID and the new details. Only users with administrator permissions can update a payment method.
+      parameters:
+        - name: idMethod
+          in: path
+          required: true
+          description: The ID of the payment method to modify
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentMethodBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Payment method updated successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+    delete:
+      security:
+        - token: []
+      tags:
+        - paymentMethods
+      summary: Delete Payment Method (Admin)
+      description: Allows an authenticated administrator to delete a specific payment method by providing its ID. Only users with administrator permissions can remove a payment method from the system.
+      parameters:
+        - name: idMethod
+          in: path
+          required: true
+          description: The ID of the payment method to modify
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Payment method deleted successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+
+  /orders:
+    get:
+      security:
+        - token: []
+      tags:
+        - orders
+      summary: Retrieve Orders List
+      description: Allows an authenticated user to view their orders. If the user is an administrator, they can view all the orders in the system.
+      responses:
+        "200":
+          $ref: "#/components/responses/GetOrder"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      security:
+        - token: []
+      tags:
+        - orders
+      summary: Place New Order
+      description: Allows an authenticated user to create a new order in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Order created successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  
+  /orders/{idOrder}:
+    put:
+      security:
+        - token: []
+      tags:
+        - orders
+      summary: Update Unconfirmed Order
+      description: Allows an authenticated user to modify their order, provided it hasn't been confirmed yet.
+      parameters:
+        - name: idOrder
+          in: path
+          required: true
+          description: The ID of the order to modify
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Order modified successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  
+  /orders/modifyState/{idOrder}:
+    post:
+      security:
+        - token: []
+      tags:
+        - orders
+      summary: Update Order Status (Admin)
+      description: Allows an authenticated administrator to change the status of an order, provided the order has been confirmed by the user. Only users with administrator permissions can update the status of an order.
+      parameters:
+        - name: idOrder
+          in: path
+          required: true
+          description: The ID of the order to modify
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderStateBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Order status updated successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+  
+  /orders/confirm/{idOrder}:
+    post:
+      security:
+        - token: []
+      tags:
+        - orders
+      summary: Confirm Order
+      description: Allows an authenticated user to confirm their order in the system, signaling it's ready for further processing.
+      parameters:
+        - name: idOrder
+          in: path
+          required: true
+          description: The ID of the order to modify
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Order modified successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+      
 
 components:
   schemas:
@@ -130,27 +508,78 @@ components:
       properties:
         username:
           type: string
+          example: user
         name:
           type: string
+          example: name
         lastname:
           type: string
+          example: lastname
         email:
           type: string
+          example: email@email.com
         phone:
           type: string
+          example: "1234567"
         address:
           type: string
+          example: address 123
         password:
           type: string
+          example: password
         passwordConf:
           type: string
+          example: password
     UserLogin:
       type: object
       properties:
         username:
           type: string
+          example: user
         password:
           type: string
+          example: password
+    ProductBody:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Pizza"
+        price:
+          type: integer
+          example: 300
+    PaymentMethodBody:
+      type: object
+      properties:
+        method:
+          type: string
+          example: "Credit"
+    OrderBody:
+      type: object
+      properties:
+        address:
+          type: string
+          example: address 123
+        paymentMethod:
+          type: string
+          example: Efectivo
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: integer
+                example: 0
+              quantity:
+                type: integer
+                example: 3
+    OrderStateBody:
+      type: object
+      properties:
+        orderStatus:
+          type: string
+          example: "preparing"
 
   responses:
     BadRequest:
@@ -163,6 +592,76 @@ components:
               error:
                 type: string
                 example: "The fields cannot be empty"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Not authenticated"
+    UnauthorizedAdmin:
+      description: Unauthorized - This could be due to not being authenticated or not having admin privileges"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Can be 'Not authenticated' or 'You do not have administrator permissions'.
+    GetOrder:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  example: 0
+                orderStatus:
+                  type: string
+                  example: pending
+                orderDate:
+                  type: string
+                  example: 06-10-23
+                description:
+                  type: string
+                  example: 2xFocac
+                total:
+                  type: integer
+                  example: 1000
+                username:
+                  type: string
+                  example: user
+                address:
+                  type: string
+                  example: address 123
+                paymentMethod:
+                  type: string
+                  example: Efectivo
+                details:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productId:
+                        type: integer
+                        format: int64
+                        example: 0
+                      quantity:
+                        type: integer
+                        example: 2
+                      subtotal:
+                        type: integer
+                        example: 1000
+
 
   securitySchemes:
     token:
